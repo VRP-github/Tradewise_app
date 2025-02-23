@@ -13,7 +13,7 @@ Make sure you have the following installed:
 ## Setup
 1. Clone the repository:
    ```sh
-   git clone https://github.com/your-username/Tradewise_app.git
+   [git clone https://github.com/your-username/Tradewise_app.git](https://github.com/VRP-github/Tradewise_app.git)
    cd Tradewise_app
    ```
 2. Install dependencies for both frontend and backend:
