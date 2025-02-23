@@ -1,15 +1,80 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from "react-native";
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useRouter } from 'expo-router';
 
 export default function SignUpScreen() {
   const [passwordVisible, setPasswordVisible] = useState(false);
+  const [name, setName] = useState("");
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const router = useRouter();
 
   const togglePasswordVisibility = () => {
     setPasswordVisible(!passwordVisible);
   };
+
+  const handleSignUp = async () => {
+    // Validation for empty fields
+    if (!name || !username || !email || !password) {
+      Alert.alert("Error", "All fields are required.");
+      return;
+    }
+  
+    // Email format validation
+    const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+    if (!emailRegex.test(email)) {
+      Alert.alert("Error", "Please enter a valid email address.");
+      return;
+    }
+  
+    // Password length validation
+    if (password.length < 6) {
+      Alert.alert("Error", "Password must be at least 6 characters long.");
+      return;
+    }
+  
+    try {
+      const response = await fetch('http://11.44.255.176:5000/users/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name,
+          username,
+          email,
+          password,
+        }),
+      });
+  
+      // Check if response is ok
+      if (!response.ok) {
+        const responseData = await response.json();
+        // Display server error message
+        Alert.alert("Error", responseData.message || "Failed to sign up.");
+        return;
+      }
+  
+      // Handle success
+      const data = await response.json();
+      Alert.alert("Success", "Account created successfully");
+  
+      // Clear input fields after successful signup
+      setName("");
+      setUsername("");
+      setEmail("");
+      setPassword("");
+  
+      // Navigate to Signin screen
+      router.push('./Signin');
+    } catch (error) {
+      console.error(error);
+      Alert.alert("Error", "An error occurred during sign-up. Please try again.");
+    }
+  };
+  
 
   return (
     <View style={styles.container}>
@@ -24,31 +89,39 @@ export default function SignUpScreen() {
       <Text style={styles.title}>Create Account</Text>
       <Text style={styles.title2}>Start your journey with us</Text>
 
-      {/* Email Input */}
+      {/* Username Input */}
       <Text style={styles.inputLabel}>Username</Text>
       <TextInput
         style={styles.input}
         placeholder="johndoe"
         placeholderTextColor="#C7C7CD"
+        value={username}
+        onChangeText={setUsername}
         autoCapitalize="none"
       />
 
+      {/* Name Input */}
       <Text style={styles.inputLabel}>Name</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="John Doe"
-          placeholderTextColor="#C7C7CD"
-          autoCapitalize="none"
-        />
+      <TextInput
+        style={styles.input}
+        placeholder="John Doe"
+        placeholderTextColor="#C7C7CD"
+        value={name}
+        onChangeText={setName}
+        autoCapitalize="none"
+      />
 
-        <Text style={styles.inputLabel}>Email address</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="John Doe"
-          placeholderTextColor="#C7C7CD"
-          keyboardType="email-address"
-          autoCapitalize="none"
-        />
+      {/* Email Input */}
+      <Text style={styles.inputLabel}>Email address</Text>
+      <TextInput
+        style={styles.input}
+        placeholder="john.doe@example.com"
+        placeholderTextColor="#C7C7CD"
+        keyboardType="email-address"
+        value={email}
+        onChangeText={setEmail}
+        autoCapitalize="none"
+      />
 
       {/* Password Input */}
       <Text style={styles.inputLabel}>Password</Text>
@@ -58,6 +131,8 @@ export default function SignUpScreen() {
           placeholder="Password"
           placeholderTextColor="#C7C7CD"
           secureTextEntry={!passwordVisible}
+          value={password}
+          onChangeText={setPassword}
         />
         <TouchableOpacity onPress={togglePasswordVisibility} style={styles.eyeIcon}>
           <MaterialCommunityIcons
@@ -68,13 +143,8 @@ export default function SignUpScreen() {
         </TouchableOpacity>
       </View>
 
-      {/* Forgot Password
-      <TouchableOpacity>
-        <Text style={styles.forgotPassword}>Forgot password?</Text>
-      </TouchableOpacity> */}
-
-      {/* Login Button */}
-      <TouchableOpacity style={styles.loginButton}>
+      {/* Sign Up Button */}
+      <TouchableOpacity style={styles.loginButton} onPress={handleSignUp}>
         <Text style={styles.loginButtonText}>Sign up</Text>
       </TouchableOpacity>
 

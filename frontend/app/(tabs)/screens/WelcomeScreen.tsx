@@ -24,7 +24,7 @@ export default function Example() {
       <View style={styles.content}>
         <View style={styles.contentHeader}>
           <Text style={styles.title}>
-            Plan your Trades{'\n'}with{' '}
+            Analyze your Trades{'\n'}with{' '}
             <View style={styles.appName}>
               <Text style={styles.appNameText}>TradeWise</Text>
             </View>

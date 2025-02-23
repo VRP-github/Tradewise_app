@@ -1,8 +1,7 @@
-const { Pool } = require('pg'); // Import PostgreSQL pool
-
-// Load environment variables
+const { Pool } = require('pg'); 
 require('dotenv').config();
 
+const isProduction = process.env.NODE_ENV ==="production";
 // PostgreSQL connection setup
 const pool = new Pool({
   user: process.env.DB_USER,        // Replace with your PostgreSQL username
