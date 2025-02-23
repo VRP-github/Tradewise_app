@@ -31,7 +31,7 @@ To run the **React Native** frontend and **Express.js** backend simultaneously, 
 Open a terminal and navigate to the `backend` directory:
    ```sh
    cd backend
-   node server.js
+   npm run dev
    ```
 This will start the backend server.
 
