@@ -1,30 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { Text, StyleSheet, View } from 'react-native';
-import { HelloWave } from '@/components/HelloWave';
+import React from 'react';
+import { View, StyleSheet } from 'react-native';
+import { StatusBar } from 'expo-status-bar'; // Import StatusBar
+import WelcomeScreen from './screens/WelcomeScreen'; // Assuming this is the path to WelcomeScreen
 
 export default function HomeScreen() {
-  const [tradersMessage, setTradersMessage] = useState('');
-
-  // Fetch the message from the backend
-  const fetchTradersMessage = async () => {
-    try {
-      const response = await fetch('http://11.44.255.91:5000/hello'); 
-      const data = await response.json();
-      setTradersMessage(data.message);
-    } catch (error) {
-      console.error('Error fetching message:', error);
-    }
-  };
-
-  useEffect(() => {
-    fetchTradersMessage();
-  }, []);
-
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Hello TradeWise!</Text>
-      {tradersMessage ? <Text style={styles.subtitle}>{tradersMessage}</Text> : null}
-      <HelloWave />
+      {/* Configure the StatusBar */}
+      <StatusBar style="dark" backgroundColor="#F8F5FF" translucent={true} />
+      <WelcomeScreen />
     </View>
   );
 }
@@ -32,21 +16,12 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 16,
-    backgroundColor: '#000', // Optional: To make the background dark for better visibility
+    padding: 3,
+    backgroundColor: '#fff',
   },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
-    marginBottom: 20,
-    color: 'white', // White text
-  },
-  subtitle: {
-    fontSize: 20,
-    fontWeight: '500',
-    marginBottom: 20,
-    color: 'white', // White text
+    color: 'black', // Black text
   },
 });
